@@ -1,0 +1,68 @@
+library("shiny")
+
+ui <- fluidPage(
+
+    titlePanel("Central limit theorem example"),
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput(
+                inputId = "obs",
+                label = "Number of observations per sample:",
+                min = 1,
+                max = 500,
+                value = 5
+            ),
+            sliderInput(
+                inputId = "samples",
+                label = "Number of samples:",
+                min = 1,
+                max = 500,
+                value = 50
+            ),
+            selectInput(
+                "distribution",
+                "Type of distribution:",
+                choices = c(
+                    "normal" = "rnorm",
+                    "binomial" = "rbinom",
+                    "exponential" = "rexp",
+                    "t-distribution" = "rt",
+                    "cauchy" = "rcauchy",
+                    "negative binomial" = "rnbinom",
+                    "gamma" = "rgamma"
+                )
+            )
+        ),
+
+        # Main panel for displaying outputs ----
+        mainPanel(
+            plotOutput(outputId = "distPlot")
+        )
+    )
+)
+
+server <- function(input, output) {
+
+    output$distPlot <- renderPlot({
+        if (input$distribution %in% c("rbinom", "rnbinom")) {
+            args <- list(input$obs, 100, 0.5)
+        } else if (input$distribution == "rexp") {
+            args <- list(input$obs)
+        } else {
+            args <- list(input$obs, 1, 1)
+        }
+        data <- replicate(
+            input$samples,
+            mean(do.call(input$distribution, args))
+        )
+        hist(
+            data,
+            breaks = "FD",
+            freq = FALSE,
+            xlab = "Sample mean",
+            main = "Histogram of sample means")
+        }
+    )
+}
+
+shinyApp(ui = ui, server = server)
