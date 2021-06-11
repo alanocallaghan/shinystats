@@ -1,0 +1,27 @@
+Package: shinystats
+Type: Package
+Title: Shiny apps to demonstrate statistical concepts
+Version: 0.0.9000
+Date: 2021-06-11
+Authors@R: c(
+        person(
+            "Alan", "O'Callaghan",
+            role = c("aut", "cre"), email = "alan.ocallaghan@outlook.com"
+        )
+    )
+Depends: R (>= 4.0.0)
+Imports: 
+    shiny,
+    limma,
+    minfi,
+    glmnet,
+    ggplot2
+Description:
+    Shiny apps meant as companions to lessons on high-dimensional statistics.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+StagedInstall: no
+BugReports: https://github.com/Alanocallaghan/snifter/issues
