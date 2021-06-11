@@ -1,3 +1,5 @@
+#' @describeIn apps A demonstration of moderated t-tests.
+#' @export
 limmaApp <- function() {
     obj <- readRDS("/home/alan/Documents/github/carpentries/high-dimensional-stats-r/data/FlowSorted_Blood_EPIC.rds")  
     # obj <- obj[1:5000, obj$bmi_clas %in% c("Normal", "Obese")]

@@ -1,3 +1,5 @@
+#' @describeIn apps A demonstration of linear regression principles.
+#' @export
 regressionApp <- function() {
     shiny::shinyApp(
         ui = shiny::fluidPage(

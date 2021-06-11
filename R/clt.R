@@ -1,3 +1,5 @@
+#' @describeIn apps A demonstration of the central limit theorem.
+#' @export
 cltApp <- function() {
     shiny::shinyApp(
         ui = shiny::fluidPage(
