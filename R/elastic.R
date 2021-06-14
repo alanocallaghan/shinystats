@@ -39,7 +39,7 @@ elasticApp <- function() {
                     ),
                     shiny::sliderInput(
                         inputId = "norm",
-                        label = "Max norm:",
+                        label = "Max coefficient norm:",
                         min = 0.1,
                         max = 10,
                         step = 0.1,
@@ -47,7 +47,7 @@ elasticApp <- function() {
                     ),
                     shiny::sliderInput(
                         inputId = "alpha",
-                        label = "Alpha:",
+                        label = "Mixing parameter (LASSO is 0, ridge is 1):",
                         min = 0,
                         max = 1,
                         step = 0.01,
