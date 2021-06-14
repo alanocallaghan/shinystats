@@ -61,7 +61,6 @@ elasticApp <- function() {
         ),
         server = function(input, output) {
             output$distPlot <- shiny::renderPlot({
-                library("viridis")
                 set.seed(42)
                 noise_sd <- input$noise
                 nobs <- input$obs

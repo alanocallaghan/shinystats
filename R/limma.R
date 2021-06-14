@@ -1,9 +1,6 @@
 #' @describeIn apps A demonstration of moderated t-tests.
 #' @export
 limmaApp <- function() {
-    obj <- readRDS("/home/alan/Documents/github/carpentries/high-dimensional-stats-r/data/FlowSorted_Blood_EPIC.rds")  
-    # obj <- obj[1:5000, obj$bmi_clas %in% c("Normal", "Obese")]
-    # obj <- obj[1:2000, ]
     shiny::shinyApp(
         ui = shiny::fluidPage(
 
@@ -12,7 +9,7 @@ limmaApp <- function() {
                 shiny::sidebarPanel(
                     shiny::sliderInput(
                         inputId = "obs",
-                        label = "Number of observations per group:",
+                        label = "Number of samples:",
                         min = 4,
                         max = 37,
                         value = 10
@@ -21,7 +18,7 @@ limmaApp <- function() {
                         inputId = "features",
                         label = "Number of features:",
                         min = 10,
-                        max = 10000,
+                        max = 5000,
                         value = 1000
                     ),
                     # sliderInput(
@@ -61,12 +58,9 @@ limmaApp <- function() {
         server = function(input, output) {
 
             output$distPlot <- shiny::renderPlot({
-                library("shiny")
-                library("limma")
-                library("minfi")
-                library("ggplot2")
 
                 inds <- list()
+                obj <- shinystats::methylation
                 # for (x in unique(obj$bmi_clas)) {
                 #     inds[[x]] <- which(obj$bmi_clas == x)[1:n]
                 # }

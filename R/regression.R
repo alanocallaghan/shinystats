@@ -49,7 +49,6 @@ regressionApp <- function() {
                 noise <- rnorm(n, sd = input$noise)
                 y <- (input$slope * x) + input$intercept + noise
                 fit <- lm(y ~ x)
-                library("ggplot2")
                 ggplot() +
                     aes(x, y) +
                     geom_point() +

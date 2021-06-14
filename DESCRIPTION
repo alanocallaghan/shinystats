@@ -15,13 +15,12 @@ Imports:
     limma,
     minfi,
     glmnet,
-    ggplot2
+    ggplot2,
+    viridis
 Description:
     Shiny apps meant as companions to lessons on high-dimensional statistics.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-VignetteBuilder: knitr
-StagedInstall: no
 BugReports: https://github.com/Alanocallaghan/snifter/issues
