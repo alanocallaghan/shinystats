@@ -10,7 +10,7 @@ limmaApp <- function() {
                     shiny::sliderInput(
                         inputId = "obs",
                         label = "Number of samples:",
-                        min = 4,
+                        min = 3,
                         max = 37,
                         value = 10
                     ),
@@ -21,34 +21,6 @@ limmaApp <- function() {
                         max = 5000,
                         value = 1000
                     ),
-                    # sliderInput(
-                    #     inputId = "intercept",
-                    #     label = "Intercept:",
-                    #     min = -10,
-                    #     max = 10,
-                    #     value = 0
-                    # ),
-                    # sliderInput(
-                    #     inputId = "noise",
-                    #     label = "Noise:",
-                    #     min = 0,
-                    #     max = 10,
-                    #     value = 1
-                    # )
-                    # ,
-                    # selectInput(
-                    #     "distribution",
-                    #     "Type of distribution:",
-                    #     choices = c(
-                    #         "normal" = "rnorm",
-                    #         "binomial" = "rbinom",
-                    #         "exponential" = "rexp",
-                    #         "t-distribution" = "rt",
-                    #         "cauchy" = "rcauchy",
-                    #         "negative binomial" = "rnbinom",
-                    #         "gamma" = "rgamma"
-                    #     )
-                    # )
                 ),
                 shiny::mainPanel(
                     shiny::plotOutput(outputId = "distPlot")
@@ -61,10 +33,7 @@ limmaApp <- function() {
 
                 inds <- list()
                 obj <- shinystats::methylation
-                # for (x in unique(obj$bmi_clas)) {
-                #     inds[[x]] <- which(obj$bmi_clas == x)[1:n]
-                # }
-                # ind <- c(inds[[1]], inds[[2]])
+
                 n <- input$obs
                 f <- input$features
 
@@ -75,14 +44,12 @@ limmaApp <- function() {
 
 
                 X <- t(getM(sub))
-                # y <- factor(sub$bmi_clas,
-                #     levels = c("Normal", "Obese"),
-                #     ordered = TRUE
-                # )
+
                 y <- sub$Age
                 lms <- lapply(1:ncol(X), function(i) {
                     lm(X[, i] ~ as.numeric(y))
                 })
+                names(lms) <- colnames(X)
                 cc1 <- sapply(1:ncol(X), function(i) {
                     coef(lms[[i]])[[1]]
                 })
@@ -97,8 +64,15 @@ limmaApp <- function() {
                 tt1 <- topTable(fit, coef = 1, number = nrow(fit))
                 tt2 <- topTable(fit, coef = 2, number = nrow(fit))
 
+                # df <- data.frame(
+                #     sapply(lms, function(x) summary(x)$sigma)[rownames(fit)],
+                #     fit$s2.post
+                # )
+
                 ps1 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"])
                 ps2 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"])
+                lims1 <- c(min(ps1, tt1[colnames(X), "P.Value"]), 1)
+                lims2 <- c(min(ps2, tt2[colnames(X), "P.Value"]), 1)
 
                 par(mfrow = c(1:2))
                 plot(
@@ -107,6 +81,8 @@ limmaApp <- function() {
                     main = "Intercept",
                     xlab = "p-value from standard t-test",
                     ylab = "p-value from moderated t-test",
+                    xlim = lims1,
+                    ylim = lims1,
                     pch = 19,
                     cex = 0.5,
                     log = "xy"
@@ -118,18 +94,13 @@ limmaApp <- function() {
                     main = "Covariate",
                     xlab = "p-value from standard t-test",
                     ylab = "p-value from moderated t-test",
+                    xlim = lims2,
+                    ylim = lims2,
                     pch = 19,
                     cex = 0.5,
                     log = "xy"
                 )
                 abline(0:1, lty = "dashed", col = "firebrick")
-                
-
-
-                # ggplot() +
-                #     aes(x, y) +
-                #     geom_point() +
-                #     geom_smooth(method = "lm", formula = "y~x")
             })
         }
     )

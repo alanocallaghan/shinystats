@@ -55,7 +55,7 @@ elasticApp <- function() {
                     )
                 ),
                 shiny::mainPanel(
-                    shiny::plotOutput(outputId = "distPlot", width = "1000px", height = "800px")
+                    shiny::plotOutput(outputId = "distPlot")
                 )
             )
         ),

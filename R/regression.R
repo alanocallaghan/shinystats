@@ -19,6 +19,7 @@ regressionApp <- function() {
                         label = "Slope:",
                         min = -10,
                         max = 10,
+                        step = 0.1,
                         value = 0
                     ),
                     shiny::sliderInput(
@@ -43,14 +44,25 @@ regressionApp <- function() {
         ),
         server = function(input, output) {
             output$distPlot <- shiny::renderPlot({
-
+                
+                set.seed(42)
                 n <- input$obs
+                noise_sd <- input$noise
+                intercept <- input$intercept
+                slope <- input$slope
+
                 x <- rnorm(n)
-                noise <- rnorm(n, sd = input$noise)
-                y <- (input$slope * x) + input$intercept + noise
+                noise <- rnorm(n, sd = noise_sd)
+                y <- intercept + (slope * x) + noise
                 fit <- lm(y ~ x)
+                
+                text <- paste0(
+                    "Estimates: ", paste(format(coef(fit), digits=3), collapse="; "), "\n",
+                    "p-value:", format(anova(fit)$P[[1]], digits=3)
+                )
                 ggplot() +
                     aes(x, y) +
+                    labs(title = "Linear regression", subtitle = text) +
                     geom_point() +
                     geom_smooth(method = "lm", formula = "y~x")
             })

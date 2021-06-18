@@ -4,7 +4,6 @@
 #' @rdname apps
 NULL
 
-
 #' Human methylation data on immunomagnetic sorted peripheral adult blood cells
 #'
 #' A random subset of 10,000 features from the Bioconductor package 
@@ -22,6 +21,6 @@ NULL
 #' @importFrom stats coef dnorm lm model.matrix rnorm
 #' @importFrom limma lmFit topTable eBayes
 #' @importFrom minfi getM
-#' @importFrom ggplot2 aes geom_point geom_smooth ggplot
+#' @importFrom ggplot2 aes geom_point geom_smooth ggplot labs
 #' @importFrom viridis viridis
 NULL
