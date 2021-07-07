@@ -69,8 +69,12 @@ limmaApp <- function() {
                 #     fit$s2.post
                 # )
 
-                ps1 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"])
-                ps2 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"])
+                ps1 <- sapply(1:ncol(X),
+                    function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"]
+                )
+                ps2 <- sapply(1:ncol(X),
+                    function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"]
+                )
                 lims1 <- c(min(ps1, tt1[colnames(X), "P.Value"]), 1)
                 lims2 <- c(min(ps2, tt2[colnames(X), "P.Value"]), 1)
 

@@ -41,3 +41,12 @@ Shiny apps to demonstrate statistical principles.
 \item \code{ridgeApp}: A demonstration of ridge regression.
 }}
 
+\examples{
+\dontrun{
+ regressionApp()
+ limmaApp()
+ ridgeApp()
+ lassoApp()
+ elasticApp()
+}
+}
