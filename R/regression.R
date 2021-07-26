@@ -44,7 +44,7 @@ regressionApp <- function() {
         ),
         server = function(input, output) {
             output$distPlot <- shiny::renderPlot({
-                
+
                 set.seed(42)
                 n <- input$obs
                 noise_sd <- input$noise
@@ -55,10 +55,12 @@ regressionApp <- function() {
                 noise <- rnorm(n, sd = noise_sd)
                 y <- intercept + (slope * x) + noise
                 fit <- lm(y ~ x)
-                
+
                 text <- paste0(
-                    "Estimates: ", paste(format(coef(fit), digits=3), collapse="; "), "\n",
-                    "p-value:", format(anova(fit)$P[[1]], digits=3)
+                    "Estimates: ", paste(
+                        format(coef(fit), digits = 3), collapse="; "
+                    ), "\n",
+                    "p-value:", format(anova(fit)$P[[1]], digits = 3)
                 )
                 ggplot() +
                     aes(x, y) +
