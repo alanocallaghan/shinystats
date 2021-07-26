@@ -1,6 +1,13 @@
 #' @name Apps
 #' @title Shiny apps to demonstrate statistical principles.
-#' 
+#' @examples
+#' \dontrun{
+#'  regressionApp()
+#'  limmaApp()
+#'  ridgeApp()
+#'  lassoApp()
+#'  elasticApp()
+#' }
 #' @rdname apps
 NULL
 
@@ -18,9 +25,12 @@ NULL
 "methylation"
 
 #' @importFrom graphics abline contour hist image par points
-#' @importFrom stats coef dnorm lm model.matrix rnorm
+#' @importFrom stats coef dnorm lm model.matrix rnorm anova
 #' @importFrom limma lmFit topTable eBayes
 #' @importFrom minfi getM
-#' @importFrom ggplot2 aes geom_point geom_smooth ggplot labs
-#' @importFrom viridis viridis
+#' @importFrom ggplot2 ggplot aes
+#'  geom_point geom_smooth geom_tile
+#'  labs lims xlab ylab xlim ylim
+#'  theme_bw
+#' @importFrom viridis viridis scale_colour_viridis
 NULL

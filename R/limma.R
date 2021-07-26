@@ -4,7 +4,7 @@ limmaApp <- function() {
     shiny::shinyApp(
         ui = shiny::fluidPage(
 
-            shiny::titlePanel("Standard t-test vs moderated t-test"),
+            shiny::titlePanel("Standard vs pooled t-test"),
             shiny::sidebarLayout(
                 shiny::sidebarPanel(
                     shiny::sliderInput(
@@ -69,8 +69,12 @@ limmaApp <- function() {
                 #     fit$s2.post
                 # )
 
-                ps1 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"])
-                ps2 <- sapply(1:ncol(X), function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"])
+                ps1 <- sapply(1:ncol(X),
+                    function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"]
+                )
+                ps2 <- sapply(1:ncol(X),
+                    function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"]
+                )
                 lims1 <- c(min(ps1, tt1[colnames(X), "P.Value"]), 1)
                 lims2 <- c(min(ps2, tt2[colnames(X), "P.Value"]), 1)
 
@@ -80,7 +84,7 @@ limmaApp <- function() {
                     y = tt1[colnames(X), "P.Value"],
                     main = "Intercept",
                     xlab = "p-value from standard t-test",
-                    ylab = "p-value from moderated t-test",
+                    ylab = "p-value from pooled t-test",
                     xlim = lims1,
                     ylim = lims1,
                     pch = 19,
@@ -93,7 +97,7 @@ limmaApp <- function() {
                     y = tt2[colnames(X), "P.Value"],
                     main = "Covariate",
                     xlab = "p-value from standard t-test",
-                    ylab = "p-value from moderated t-test",
+                    ylab = "p-value from pooled t-test",
                     xlim = lims2,
                     ylim = lims2,
                     pch = 19,

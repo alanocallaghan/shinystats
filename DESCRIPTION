@@ -16,7 +16,9 @@ Imports:
     minfi,
     glmnet,
     ggplot2,
-    viridis
+    viridis,
+    reshape2,
+    cowplot
 Description:
     Shiny apps meant as companions to lessons on high-dimensional statistics.
 License: GPL-3

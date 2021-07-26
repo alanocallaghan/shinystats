@@ -3,7 +3,6 @@
 regressionApp <- function() {
     shiny::shinyApp(
         ui = shiny::fluidPage(
-
             shiny::titlePanel("Linear regression"),
             shiny::sidebarLayout(
                 shiny::sidebarPanel(
@@ -56,17 +55,54 @@ regressionApp <- function() {
                 y <- intercept + (slope * x) + noise
                 fit <- lm(y ~ x)
 
+                nsamples <- 200
+                sx <- seq(min(x) * 1.1, max(x) * 1.1, length.out = nsamples)
+                sy <- seq(min(y) * 1.1, max(y) * 1.1, length.out = nsamples)
+                fx <- cbind(rep(1, nsamples), sx) %*% c(intercept, slope)
+
+                dens <- matrix(NA, nrow = nsamples, ncol = nsamples,
+                    dimnames = list(sx, sy)
+                )
+                for (i in seq_along(sx)) {
+                    for (j in seq_along(sy)) {
+                        dens[i, j] <- dnorm(
+                            sy[[j]],
+                            mean = fx[[i]],
+                            sd = noise_sd
+                        )
+                    }
+                }
+                mdf <- reshape2::melt(dens)
+
+                xlim <- xlim(range(x) * 1.1)
+                ylim <- ylim(range(y) * 1.1)
+
+                g1 <- ggplot(mdf) +
+                    aes(x = Var1, y = Var2, fill = value) +
+                    geom_tile() +
+                    scale_colour_viridis(
+                        name = "Probability",
+                        aesthetics = "fill"
+                    ) +
+                    xlim + ylim +
+                    labs(x = "x", y = "y") +
+                    theme_bw()
+
                 text <- paste0(
                     "Estimates: ", paste(
-                        format(coef(fit), digits = 3), collapse="; "
+                        format(coef(fit), digits = 3), collapse = "; "
                     ), "\n",
                     "p-value:", format(anova(fit)$P[[1]], digits = 3)
                 )
-                ggplot() +
+
+                g2 <- ggplot() +
                     aes(x, y) +
                     labs(title = "Linear regression", subtitle = text) +
                     geom_point() +
-                    geom_smooth(method = "lm", formula = "y~x")
+                    geom_smooth(method = "lm", formula = "y~x") +
+                    xlim + ylim +
+                    theme_bw()
+                cowplot::plot_grid(g1, g2)
             })
         }
     )
