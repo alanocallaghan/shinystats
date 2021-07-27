@@ -18,6 +18,7 @@ Imports:
     ggplot2,
     viridis,
     reshape2,
+    SummarizedExperiment,
     cowplot
 Description:
     Shiny apps meant as companions to lessons on high-dimensional statistics.

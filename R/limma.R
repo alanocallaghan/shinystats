@@ -31,7 +31,6 @@ limmaApp <- function() {
 
             output$distPlot <- shiny::renderPlot({
 
-                inds <- list()
                 obj <- shinystats::methylation
 
                 n <- input$obs
@@ -39,27 +38,23 @@ limmaApp <- function() {
 
                 ind <- 1:min(n, ncol(obj))
                 ind_f <- 1:f
-
                 sub <- obj[ind_f, ind]
-
-
-                X <- t(getM(sub))
-
-                y <- sub$Age
-                lms <- lapply(1:ncol(X), function(i) {
-                    lm(X[, i] ~ as.numeric(y))
+ 
+                x <- t(assay(sub))
+                lms <- lapply(seq_len(ncol(x)), function(i) {
+                    lm(x[, i] ~ as.numeric(y))
                 })
-                names(lms) <- colnames(X)
-                cc1 <- sapply(1:ncol(X), function(i) {
+                names(lms) <- colnames(x)
+                cc1 <- sapply(seq_len(ncol(x)), function(i) {
                     coef(lms[[i]])[[1]]
                 })
-                cc2 <- sapply(1:ncol(X), function(i) {
+                cc2 <- sapply(seq_len(ncol(x)), function(i) {
                     coef(lms[[i]])[[2]]
                 })
 
-                design <- model.matrix(~y)
+                design <- model.matrix(~sub$Age)
                 colnames(design) <- c("intercept", "age")
-                fit <- lmFit(t(X), design = design)
+                fit <- lmFit(t(x), design = design)
                 fit <- eBayes(fit)
                 tt1 <- topTable(fit, coef = 1, number = nrow(fit))
                 tt2 <- topTable(fit, coef = 2, number = nrow(fit))
@@ -69,19 +64,19 @@ limmaApp <- function() {
                 #     fit$s2.post
                 # )
 
-                ps1 <- sapply(1:ncol(X),
+                ps1 <- sapply(seq_len(ncol(x)),
                     function(i) summary(lms[[i]])$coef[1, "Pr(>|t|)"]
                 )
-                ps2 <- sapply(1:ncol(X),
+                ps2 <- sapply(seq_len(ncol(x)),
                     function(i) summary(lms[[i]])$coef[2, "Pr(>|t|)"]
                 )
-                lims1 <- c(min(ps1, tt1[colnames(X), "P.Value"]), 1)
-                lims2 <- c(min(ps2, tt2[colnames(X), "P.Value"]), 1)
+                lims1 <- c(min(ps1, tt1[colnames(x), "P.Value"]), 1)
+                lims2 <- c(min(ps2, tt2[colnames(x), "P.Value"]), 1)
 
                 par(mfrow = c(1:2))
                 plot(
                     x = ps1,
-                    y = tt1[colnames(X), "P.Value"],
+                    y = tt1[colnames(x), "P.Value"],
                     main = "Intercept",
                     xlab = "p-value from standard t-test",
                     ylab = "p-value from pooled t-test",
@@ -94,7 +89,7 @@ limmaApp <- function() {
                 abline(0:1, lty = "dashed", col = "firebrick")
                 plot(
                     x = ps2,
-                    y = tt2[colnames(X), "P.Value"],
+                    y = tt2[colnames(x), "P.Value"],
                     main = "Covariate",
                     xlab = "p-value from standard t-test",
                     ylab = "p-value from pooled t-test",

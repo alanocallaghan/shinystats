@@ -77,9 +77,6 @@ elasticApp <- function() {
                 noise <- rnorm(nobs, mean = 0, sd = noise_sd)
                 y <- (slope * x) + (intercept) + noise
 
-                loglik <- function(slope, intercept) {
-                    sum(dnorm(y, mean = (slope * x) + intercept, sd = noise_sd, log=TRUE))
-                }
                 n <- 200
 
                 s <- seq(-maxlim, maxlim, length.out = n)
@@ -95,27 +92,47 @@ elasticApp <- function() {
                             (sqrt(s[[i]]^2 + s[[j]]^2) * alpha) +
                             ((abs(s[[i]]) + abs(s[[j]])) * (1 - alpha))
                         )
-                        ll[i, j] <- loglik(s[i], s[j])
+                        ll[i, j] <- loglik(s[i], s[j], x, y, noise_sd)
                     }
                 }
                 mask <- norm_mat <= norm
+                ind_mle <- arrayInd(which.max(ll), dim(ll))
+                pll <- ll * as.numeric(mask)
+                pll[pll == 0] <- NA
+                ind_ple <- arrayInd(which.max(pll), dim(pll))
+
+                par(mfrow = 1:2)
+
+                plot(x, y, pch = 19)
+                abline(
+                    a = coef[ind_ple[[2]]],
+                    b = coef[ind_ple[[1]]], col = "dodgerblue"
+                )
+                abline(
+                    a = coef[ind_mle[[2]]],
+                    b = coef[ind_mle[[1]]], col = "firebrick"
+                )
                 image(s, s, ll,
                     xlab = "slope", ylab = "intercept",
-                    col = viridis(40, option = "A", direction=1)
+                    col = viridis(40, option = "A", direction = 1),
+                    xlim = lims, ylim = lims
                 )
                 abline(v = 0, lty = "dashed")
                 abline(h = 0, lty = "dashed")
-                fit <- lm(y ~ x)
 
-                ind <- arrayInd(which.max(ll), dim(ll))
-                points(coef[ind[[1]]], coef[ind[[2]]], pch = 19, cex = 2, col = "firebrick")
-                contour(s, s, norm_mat, add=TRUE, levels = norm, drawlabels = FALSE)
-                if (norm > 0) {
-                    pll <- ll * as.numeric(mask)
-                    pll[pll == 0] <- NA
-                    ind <- arrayInd(which.max(pll), dim(pll))
-                    points(coef[ind[[1]]], coef[ind[[2]]], pch = 19, cex = 2, col = "dodgerblue")
-                }
+                points(
+                    coef[ind_mle[[1]]], coef[ind_mle[[2]]],
+                    pch = 19, cex = 2, col = "firebrick"
+                )
+                contour(
+                    s, s, norm_mat,
+                    add = TRUE, levels = norm, drawlabels = FALSE
+                )
+
+                points(
+                    coef[ind_ple[[1]]], coef[ind_ple[[2]]],
+                    pch = 19, cex = 2, col = "dodgerblue"
+                )
             })
         }
     )

@@ -5,10 +5,11 @@
 \alias{methylation}
 \title{Human methylation data on immunomagnetic sorted peripheral adult blood cells}
 \format{
-A \linkS4class{GenomicRatioSet} with 10,000 features and 37 samples along with associated metadata.
+A \linkS4class{GenomicRatioSet} with 10,000 features and 37 samples
+along with associated metadata.
 }
 \source{
-\url{https://bioconductor.org/packages/release/data/experiment/html/FlowSorted.Blood.EPIC.html}
+\url{https://bioconductor.org/packages/3.12/data/experiment/html/FlowSorted.Blood.EPIC.html}
 }
 \usage{
 methylation
