@@ -119,7 +119,6 @@ ridgeApp <- function() {
                     coef[ind_ple[[1]]], coef[ind_ple[[2]]],
                     pch = 19, cex = 2, col = "dodgerblue"
                 )
-
             })
         }
     )
