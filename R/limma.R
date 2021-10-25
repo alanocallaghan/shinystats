@@ -39,10 +39,11 @@ limmaApp <- function() {
                 ind <- 1:min(n, ncol(obj))
                 ind_f <- 1:f
                 sub <- obj[ind_f, ind]
- 
+
                 x <- t(assay(sub))
+                y <- sub$Age
                 lms <- lapply(seq_len(ncol(x)), function(i) {
-                    lm(x[, i] ~ as.numeric(y))
+                    lm(x[, i] ~ y)
                 })
                 names(lms) <- colnames(x)
                 cc1 <- sapply(seq_len(ncol(x)), function(i) {
