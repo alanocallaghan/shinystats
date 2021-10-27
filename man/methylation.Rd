@@ -15,11 +15,11 @@ along with associated metadata.
 methylation
 }
 \description{
-A random subset of 10,000 features from the Bioconductor package 
+A random subset of 10,000 features from the Bioconductor package
 "FlowSorted.Blood.EPIC" from Bioconductor 3.13.
 }
 \details{
-The FlowSorted.Blood.EPIC object is based in samples assayed by Brock 
+The FlowSorted.Blood.EPIC object is based in samples assayed by Brock
 Christensen and colleagues; for details see Salas et al. 2018.
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE110554}.
 }
